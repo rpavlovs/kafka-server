@@ -1,0 +1,22 @@
+{
+  "name": "kafka-server",
+  "version": "1.0.0",
+  "description": "A playground for nodejs+koa+kafka",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rpavlovs/kafka-server.git"
+  },
+  "author": "Roman Pavlovskyi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rpavlovs/kafka-server/issues"
+  },
+  "homepage": "https://github.com/rpavlovs/kafka-server#readme",
+  "dependencies": {
+    "koa": "^1.2.1"
+  }
+}
