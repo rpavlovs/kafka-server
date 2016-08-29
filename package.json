@@ -4,7 +4,8 @@
   "description": "A playground for nodejs+koa+kafka",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "start": "node --harmony app.js",
+    "test": "./node_modules/mocha/bin/mocha --harmony test.js -R nyan"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,14 @@
   },
   "homepage": "https://github.com/rpavlovs/kafka-server#readme",
   "dependencies": {
-    "koa": "^1.2.1"
+    "koa": "^1.2.1",
+    "pg": "^6.1.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.24.1"
+  },
+  "devDependencies": {
+    "mocha": "^3.0.2",
+    "should": "^11.1.0",
+    "supertest": "^2.0.0"
   }
 }
