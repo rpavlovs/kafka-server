@@ -1,11 +1,11 @@
 var app       = require('./app.js')
-let should    = require('should')
-let Sequelize = require('sequelize')
-let request   = require('supertest').agent(app.listen())
+var should    = require('should')     // eslint-disable-line no-unused-vars
+var Sequelize = require('sequelize')
+var request   = require('supertest').agent(app.listen())
 
 
 // 'postgres://username:password@host:port/db_name'
-let POSTGRESQL_URL = 'postgres://' +
+var POSTGRESQL_URL = 'postgres://' +
         'oudrxwjg:2zf_R3YnmfpwgJv_jLdqlUc-yoqDJxnt' +
         '@elmer.db.elephantsql.com:5432/' + 
         'oudrxwjg'
@@ -23,8 +23,10 @@ describe('Simple NodeJS App', () => {
   
   beforeEach( (done) => {
     // drops all tables and re-creates them
-    sequelize.sync({ force : true })
-    done()
+    sequelize.sync({ force : true }).then( () => {
+      done()
+    })
+    
   })
 
 
@@ -50,8 +52,15 @@ describe('Simple NodeJS App', () => {
         res.body.name.should.equal(testUser.name)
         res.body.email.should.equal(testUser.email)
         res.body.password.should.equal(testUser.password)
-        res.body.should.have.property("_id")
-        res.body.should.not.equal(null)
+        
+        res.body.should.have.property('id')
+        res.body.id.should.not.equal(null)
+        
+        res.body.should.have.property('updatedAt')
+        res.body.updatedAt.should.not.equal(null)
+
+        res.body.should.have.property('createdAt')
+        res.body.createdAt.should.not.equal(null)
 
         done()
 

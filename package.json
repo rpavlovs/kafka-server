@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node --harmony app.js",
-    "test": "./node_modules/mocha/bin/mocha --harmony test.js -R nyan"
+    "test": "node ./node_modules/mocha/bin/mocha --harmony test.js -R nyan"
   },
   "repository": {
     "type": "git",
@@ -18,12 +18,16 @@
   },
   "homepage": "https://github.com/rpavlovs/kafka-server#readme",
   "dependencies": {
+    "co": "^4.6.0",
+    "co-body": "^4.2.0",
     "koa": "^1.2.1",
+    "koa-route": "^2.4.2",
     "pg": "^6.1.0",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.24.1"
   },
   "devDependencies": {
+    "eslint": "^3.4.0",
     "mocha": "^3.0.2",
     "should": "^11.1.0",
     "supertest": "^2.0.0"
