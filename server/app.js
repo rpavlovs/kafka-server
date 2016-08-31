@@ -32,7 +32,7 @@ function *setupAndStart() {
 
   // Setup routes
   app.use(route.post('/classes/user/', userRoutes.add))
-
+  app.use(route.put('/classes/user/:id', userRoutes.update))
   
   app.listen(port)
   console.log('Connected to database and listening on port 3000')

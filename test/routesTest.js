@@ -95,6 +95,8 @@ describe('/classes/user', () => {
       
       let r = yield server.post('/classes/user').send(testUser).end()
 
+      r.status.should.equal(200)
+
       r.body.should.not.have.property('extraStaff')
 
     })
@@ -118,7 +120,7 @@ describe('/classes/user', () => {
       yield models.sequelize.sync({ force : true })
       
       // create test user
-      user = yield server.post('/classes/user').send(testUserData).end()
+      user = yield models.User.create(testUserData)
     
     })
 
@@ -129,8 +131,10 @@ describe('/classes/user', () => {
         name: 'MarcusUpdated'
       }
 
-      let r = yield server.put('/classes/user' + user.id).send(update).end()
+      let r = yield server.put('/classes/user/' + user.id).send(update).end()
       
+      r.status.should.equal(200)
+
       r.body.name.should.equal(update.name)
       r.body.email.should.equal(testUserData.email)
       r.body.password.should.equal(testUserData.password)
@@ -140,11 +144,13 @@ describe('/classes/user', () => {
     it('should update user password only', function* () {
 
       let update = {
-        password: '123'
+        password: '123Updated'
       }
 
-      let r = yield server.put('/classes/user' + user.id).send(update).end()
+      let r = yield server.put('/classes/user/' + user.id).send(update).end()
       
+      r.status.should.equal(200)
+
       r.body.password.should.equal(update.password)
       r.body.name.should.equal(testUserData.name)
       r.body.email.should.equal(testUserData.email)
@@ -158,7 +164,7 @@ describe('/classes/user', () => {
         email: 'mUpdated@rc.us'
       }
 
-      let r = yield server.put('/classes/user' + user.id).send(update).end()
+      let r = yield server.put('/classes/user/' + user.id).send(update).end()
       
       r.status.should.equal(400)
       
