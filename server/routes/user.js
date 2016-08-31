@@ -10,12 +10,17 @@ function *add() {
   
   let postedUser = yield parse(this)
 
+  // Validate user fileds
   postedUser.should.have.property('name')
   postedUser.name.should.not.equal(null)
-  
-  postedUser.should.not.have.property('email', null)
-  postedUser.should.not.have.property('password', null)
 
+  postedUser.should.have.property('email')
+  postedUser.email.should.not.equal(null)
+
+  postedUser.should.have.property('password')
+  postedUser.password.should.not.equal(null)
+
+  // Create user
   let newUser = yield models.User.create(postedUser)
 
   this.body = newUser
