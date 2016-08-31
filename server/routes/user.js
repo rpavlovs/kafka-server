@@ -4,7 +4,7 @@ let models = require('../models')
 let handlers = module.exports = {}
 
 /**
- * Handles user craetion
+ * Handles user creation
  */
 function *add() {
   

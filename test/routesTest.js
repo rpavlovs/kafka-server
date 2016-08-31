@@ -1,11 +1,12 @@
-var supertest = require('co-supertest')
-var app       = require('../server/app')
-var models    = require('../server/models')
-
-var server = supertest(app.listen())
+let supertest = require('co-supertest')
+let app       = require('../server/app')
+let models    = require('../server/models')
 
 
 describe('User routes', () => {
+
+  let server = supertest(app.listen())
+
 
   beforeEach( function* () {
     // drops and re-creates all tables
