@@ -10,7 +10,7 @@ let app = module.exports = koa()
 
 let port = null
 
-co(setupAndStart).catch(onError)
+co(setupAndStart).catch(onSetupError)
 
 
 /**
@@ -28,7 +28,7 @@ function *setupAndStart() {
   onerror(app)
 
   // Setup middleware
-  app.use(onKoaError)
+  app.use(onError)
 
   // Setup routes
   app.use(route.post('/classes/user/', userRoutes.add))
@@ -63,7 +63,7 @@ function normalizePort(val) {
 /**
  * Custom error handler
  */
-function *onKoaError(next) {
+function *onError(next) {
 
   try {
     yield next
@@ -90,7 +90,7 @@ function *onKoaError(next) {
  * Event listener for HTTP server "error" event.
  * @param {error} err object containing error info
  */
-function onError(err) {
+function onSetupError(err) {
 
   if (err.syscall !== 'listen') {
     throw err

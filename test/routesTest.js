@@ -29,6 +29,9 @@ describe('User routes', () => {
     r.body.should.have.property('password', testUser.password)
     r.body.should.have.property('name', testUser.name)
     r.body.should.have.property('email', testUser.email)
+    r.body.should.have.property('id')
+    r.body.should.have.property('updatedAt')
+    r.body.should.have.property('createdAt')
 
     r.body.should.not.have.property('id', null)
     r.body.should.not.have.property('updatedAt', null)
@@ -75,6 +78,22 @@ describe('User routes', () => {
     let r = yield server.post('/classes/user').send(testUser).end()
 
     r.status.should.equal(400)
+
+  })
+
+
+  it('should strip down extra fields', function* () {
+
+    let testUser = {
+      name      : 'Marcus',
+      email     : 'm@rc.us',
+      password  : '123',
+      extraStaff: 'qwerty',
+    }
+    
+    let r = yield server.post('/classes/user').send(testUser).end()
+
+    r.body.should.not.have.property('extraStaff')
 
   })
 

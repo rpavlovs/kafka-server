@@ -1,3 +1,4 @@
+let _	   = require('underscore')
 let parse  = require('co-body')
 let models = require('../models')
 
@@ -21,7 +22,7 @@ function *add() {
   postedUser.password.should.not.equal(null)
 
   // Create user
-  let newUser = yield models.User.create(postedUser)
+  let newUser = yield models.User.create(_(postedUser).pick('name', 'email', 'password'))
 
   this.body = newUser
   this.status = 200
