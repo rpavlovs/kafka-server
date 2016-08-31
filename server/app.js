@@ -27,9 +27,12 @@ function *setupAndStart() {
   // Setup error handling
   onerror(app)
 
+  // Setup middleware
+  app.use(onKoaError)
+
   // Setup routes
   app.use(route.post('/classes/user/', userRoutes.add))
-  app.use(onNotFound)
+
   
   app.listen(port)
   console.log('Connected to database and listening on port 3000')
@@ -58,10 +61,28 @@ function normalizePort(val) {
 
 
 /**
- * Custom handler for 404 error
+ * Custom error handler
  */
-function *onNotFound() {
-  this.body = '404 Not Found'
+function *onKoaError(next) {
+
+  try {
+    yield next
+  } 
+  catch (err) {
+
+    if (err.assertion) {
+      this.status = 400
+      this.body = '400 Bad Request - ' + err.message
+      console.error(this.body)
+      return
+    }
+
+    this.status = err.status || 500
+    this.body = err.message
+    console.error(err.message)
+
+  }
+
 }
 
 

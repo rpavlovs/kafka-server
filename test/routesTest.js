@@ -36,4 +36,46 @@ describe('User routes', () => {
   
   })
 
+
+  it('should not be create a user without name', function* () {
+
+    let testUser = {
+      email   : 'm@rc.us',
+      password: '123',
+    }
+    
+    let r = yield server.post('/classes/user').send(testUser).end()
+
+    r.status.should.equal(400)
+
+  })
+
+
+  it('should not create a user without email', function* () {
+
+    let testUser = {
+      name    : 'Marcus',
+      password: '123',
+    }
+    
+    let r = yield server.post('/classes/user').send(testUser).end()
+
+    r.status.should.equal(400)
+
+  })
+
+
+  it('should not create a user without password', function* () {
+
+    let testUser = {
+      name    : 'Marcus',
+      email   : 'm@rc.us',
+    }
+    
+    let r = yield server.post('/classes/user').send(testUser).end()
+
+    r.status.should.equal(400)
+
+  })
+
 })
