@@ -3,9 +3,9 @@ let koa        = require('koa')
 let route      = require('koa-route')
 let onerror    = require('koa-onerror')
 let models     = require('./models')
-let userRoutes = require('./routes/user')
+let handlers   = require('./routes/handlers')
 
-let app = module.exports = koa()
+let app = module.exports = new koa()
 
 
 let port = null
@@ -31,11 +31,12 @@ function *setupAndStart() {
   app.use(onError)
 
   // Setup routes
-  app.use(route.post('/classes/user/', userRoutes.add))
-  app.use(route.put('/classes/user/:id', userRoutes.update))
+  app.use(route.post('/classes/user/', handlers.addUser))
+  app.use(route.put('/classes/user/:id', handlers.updateUser))
+  app.use(route.post('/log/', handlers.log))
   
   app.listen(port)
-  console.log('Connected to database and listening on port 3000')
+  console.log('Connected to database and listening on port ' + port)
 
 }
 
@@ -44,6 +45,7 @@ function *setupAndStart() {
  * Normalize a port into a number, string, or false.
  */
 function normalizePort(val) {
+
   let port = parseInt(val, 10)
 
   if (isNaN(port)) {
@@ -57,6 +59,7 @@ function normalizePort(val) {
   }
 
   return false
+
 }
 
 

@@ -1,5 +1,6 @@
 let fs        = require('co-fs')
 let supertest = require('co-supertest')
+var sleep     = require('sleep')
 let app       = require('../server/app')
 
 
@@ -8,32 +9,49 @@ describe('/log', () => {
   let server = supertest(app.listen())
 
 
-  describe('#create', () => {
+  it('should write a log message to app.log', function* () {
 
-    beforeEach( function* () {
+    let logMessage = {
+      actionId: 'LOG_TEST',
+      userId  : '12345',
+      data    : 'Log test'
+    }
 
-    })
-
-
-    it('should write a log message to app.log', function* () {
-
-      let logMessage = {
-        actionId: 'LOG_TEST',
-        userId  : '12345',
-        data    : 'Log test'
+    var logJsonBefore = ''
+    try {
+      logJsonBefore = yield fs.readFile('app.log', 'utf8')  
+    }
+    catch(err) {
+      if (err.code !== 'ENOENT') {
+        throw err
       }
+    }
+    
+    let r = yield server.post('/log').send(logMessage).end()
 
-      let logJsonBefore = yield fs.readFile('app.log', 'utf8')
+    r.status.should.equal(200)
 
-      let r = yield server.post('/log').send(logMessage).end()
+    sleep.sleep(1)
 
-      r.status.should.equal(200)
+    let logJsonAfter = yield fs.readFile('app.log', 'utf8')
 
-      let logJsonAfter = yield fs.readFile('app.log', 'utf8')
+    logJsonAfter.should.equal(
+      logJsonBefore + JSON.stringify(logMessage) + '\r\n'
+    )
 
-      logJsonAfter.should.equal(logJsonBefore + logMessage)
+  })
 
-    })
+
+  it('should ignore requests with no actionId', function* () {
+
+    let logMessage = {
+      userId: '12345',
+      data  : 'Log test'
+    }
+
+    let r = yield server.post('/log').send(logMessage).end()
+
+    r.status.should.equal(400)
 
   })
 

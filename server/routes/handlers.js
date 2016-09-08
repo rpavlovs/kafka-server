@@ -2,14 +2,15 @@ let parse  = require('co-body')
 let should = require('should')
 let _      = require('underscore')
 let models = require('../models')
+let logger = require('../kafka/Logger')
 
 let handlers = module.exports = {}
 
 /**
  * Handles user creation
  */
-function *add() {
-  
+function *addUser() {
+
   let data = yield parse(this)
 
   // Validate user fileds
@@ -27,17 +28,22 @@ function *add() {
     _(data).pick('name', 'email', 'password')
   )
 
-  this.body = newUser
+  logger.log({
+    actionId: 'USER_SIGNUP',
+    data    : newUser
+  })
+
+  this.body   = newUser
   this.status = 200
 
 }
-handlers.add = add
+handlers.addUser = addUser
 
 
 /**
  * Handles user updates
  */
-function *update(id) {
+function *updateUser(id) {
 
   let data = yield parse(this)
 
@@ -59,9 +65,34 @@ function *update(id) {
     _(data).pick('name', 'password')
   )
 
-  this.body = updatedUser
+  logger.log({
+    actionId: 'USER_EDIT_PROFILE',
+    userId  : id,
+    data    : updatedUser
+  })
+
+  this.body   = updatedUser
   this.status = 200
 
 }
-handlers.update = update
+handlers.updateUser = updateUser
 
+
+/**
+ * Handles log requests
+ */
+function *log() {
+
+  let data = yield parse(this)
+
+  // Validate user fileds
+  data.should.have.property('actionId')
+  data.should.not.have.property('actionId', null)
+  
+  logger.log(_(data).pick('actionId', 'userId', 'data'))
+
+  this.body   = {}
+  this.status = 200
+
+}
+handlers.log = log
